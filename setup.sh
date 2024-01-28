@@ -52,33 +52,32 @@ echo "Installing wallpapers"
 cp -r wallpapers ~/
 
 echo "Installing Wireshark"
-sudo apt install wireshark -y
+echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
+sudo DEBIAN_FRONTEND=noninteractive apt install wireshark -y
 sudo usermod -aG wireshark ${USER}
 
-echo
-echo "Installing Signal"
-wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg
-cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
+#echo
+#echo "Installing Signal"
+#wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg
+#cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
 
-echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' |\
-  sudo tee /etc/apt/sources.list.d/signal-xenial.list
+#echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' | sudo tee /etc/apt/sources.list.d/signal-xenial.list
+#sudo apt update && sudo apt install signal-desktop -y
 
-sudo apt update && sudo apt install signal-desktop -y
-
-echo
-echo "Installing Steam"
-sudo add-apt-repository multiverse -y
-sudo apt update
-sudo apt install steam -y
+#echo
+#echo "Installing Steam"
+#sudo add-apt-repository multiverse -y
+#sudo apt update
+#sudo apt install steam -y
 # Install mangohud
-sudo apt install mangohud -y
+#sudo apt install mangohud -y
 # Build gamemode
-sudo apt install meson libsystemd-dev pkg-config ninja-build git libdbus-1-dev libinih-dev build-essential -y
-git clone https://github.com/FeralInteractive/gamemode.git
-cd gamemode
-./bootstrap.sh
-sudo apt install linux-tools-common -y
-sudo apt install linux-tools-$(uname -r) linux-tools-generic -y
+#sudo apt install meson libsystemd-dev pkg-config ninja-build git libdbus-1-dev libinih-dev build-essential -y
+#git clone https://github.com/FeralInteractive/gamemode.git
+#cd gamemode
+#./bootstrap.sh
+#sudo apt install linux-tools-common -y
+#sudo apt install linux-tools-$(uname -r) linux-tools-generic -y
 
 echo
 echo "Installing Chrome"
@@ -99,16 +98,16 @@ echo "Installing VSCode"
 wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" -O code.deb
 sudo dpkg -i code.deb
 
-echo
-echo "Installing nvidia Drivers + CUDA-TOOLKIT"
-sudo ubuntu-drivers install
-sudo apt install nvidia-cuda-toolkit nvidia-cuda-toolkit-gcc -y
+#echo
+#echo "Installing nvidia Drivers + CUDA-TOOLKIT"
+#sudo ubuntu-drivers install
+#sudo apt install nvidia-cuda-toolkit nvidia-cuda-toolkit-gcc -y
 # Patch sway for the new drivers
-sudo sed -i "s/Exec=sway/Exec=sway --unsupported-gpu/g" /usr/share/wayland-sessions/sway.desktop
+#sudo sed -i "s/Exec=sway/Exec=sway --unsupported-gpu/g" /usr/share/wayland-sessions/sway.desktop
 
-echo
-echo "Installing Sublime"
-wget "https://download.sublimetext.com/sublime-text_build-3211_amd64.deb" -O sublime.deb
-sudo dpkg -i sublime.deb
+#echo
+#echo "Installing Sublime"
+#wget "https://download.sublimetext.com/sublime-text_build-3211_amd64.deb" -O sublime.deb
+#sudo dpkg -i sublime.deb
 
 
