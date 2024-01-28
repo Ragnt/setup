@@ -73,7 +73,7 @@ sudo apt install steam -y
 # Install mangohud
 sudo apt install mangohud -y
 # Build gamemode
-sudo apt install meson libsystemd-dev pkg-config ninja-build git libdbus-1-dev libinih-dev build-essential
+sudo apt install meson libsystemd-dev pkg-config ninja-build git libdbus-1-dev libinih-dev build-essential -y
 git clone https://github.com/FeralInteractive/gamemode.git
 cd gamemode
 ./bootstrap.sh
