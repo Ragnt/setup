@@ -9,7 +9,7 @@ sudo apt install neovim zsh curl make gcc g++ cmake pkg-config libfontconfig-dev
 
 echo
 echo "Installing Rust/Cargo"
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source "$HOME/.cargo/env"
 
 echo
@@ -18,7 +18,7 @@ cargo install alacritty
 
 echo
 echo "Installing oh-my-zsh"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 echo
 echo "Installing Fonts"
@@ -63,22 +63,22 @@ cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-key
 echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' |\
   sudo tee /etc/apt/sources.list.d/signal-xenial.list
 
-sudo apt update && sudo apt install signal-desktop
+sudo apt update && sudo apt install signal-desktop -y
 
 echo
 echo "Installing Steam"
-sudo add-apt-repository multiverse
+sudo add-apt-repository multiverse -y
 sudo apt update
-sudo apt install steam
+sudo apt install steam -y
 # Install mangohud
-sudo apt install mangohud
+sudo apt install mangohud -y
 # Build gamemode
 sudo apt install meson libsystemd-dev pkg-config ninja-build git libdbus-1-dev libinih-dev build-essential
 git clone https://github.com/FeralInteractive/gamemode.git
 cd gamemode
 ./bootstrap.sh
-sudo apt install linux-tools-common
-sudo apt install linux-tools-$(uname -r) linux-tools-generic
+sudo apt install linux-tools-common -y
+sudo apt install linux-tools-$(uname -r) linux-tools-generic -y
 
 echo
 echo "Installing Chrome"
@@ -87,7 +87,7 @@ sudo dpkg -i google-chrome-stable_current_amd64.deb
 
 echo
 echo "Installing LibreOffice"
-sudo apt install libreoffice
+sudo apt install libreoffice -y
 
 echo
 echo "Installing Obsidian"
@@ -102,7 +102,7 @@ sudo dpkg -i code.deb
 echo
 echo "Installing nvidia Drivers + CUDA-TOOLKIT"
 sudo ubuntu-drivers install
-sudo apt install nvidia-cuda-toolkit nvidia-cuda-toolkit-gcc
+sudo apt install nvidia-cuda-toolkit nvidia-cuda-toolkit-gcc -y
 # Patch sway for the new drivers
 sudo sed -i "s/Exec=sway/Exec=sway --unsupported-gpu/g" /usr/share/wayland-sessions/sway.desktop
 
