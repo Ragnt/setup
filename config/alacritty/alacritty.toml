@@ -9,7 +9,7 @@ style = "Beam"
 size = 11.0
 
 [font.normal]
-family = "MesloLGS NF"
+family = "terminal-font"
 
 [window]
 opacity = 0.9

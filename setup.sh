@@ -1,11 +1,17 @@
 #!/bin/bash
 
+echo WARNING:
+echo "Run 'sudo apt update && sudo apt upgrade -y && reboot' manually before running this script."
+echo "Failing to do so may result in undefined behavior."
+echo
+echo "Staring in 5 seconds..."
+sleep 4;
 echo "Initial Setup"
 sudo apt update && sudo apt upgrade -y
 
 echo
 echo "Installing Tools/Dependencies"
-sudo apt install neovim zsh curl make gcc g++ cmake pkg-config libfontconfig-dev git -y
+sudo apt install neovim zsh curl make gcc g++ cmake pkg-config libfontconfig-dev git flameshot -y
 
 echo
 echo "Installing Rust/Cargo"
@@ -15,6 +21,9 @@ source "$HOME/.cargo/env"
 echo
 echo "Installing alacritty"
 cargo install alacritty
+sudo ln -1 $HOME/.cargo/bin/alacritty /usr/bin/alacritty
+sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
+sudo cp extra/alacritty.desktop /usr/share/applications/
 
 echo
 echo "Installing oh-my-zsh"
@@ -22,8 +31,9 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 echo
 echo "Installing Fonts"
-mkdir -p ~/.local/share/fonts && cp -r fonts/ ~/.local/share/
+mkdir -p $HOME/.local/share/fonts && cp -r fonts/ $HOME/.local/share/
 fc-cache -f -v
+sudo cp local.conf /etc/fonts/
 
 echo
 echo "Installing Powerlevel10k"
@@ -38,46 +48,30 @@ sed -i 's@plugins=(git)@plugins=(git zsh-autosuggestions zsh-bash-completions-fa
 
 echo
 echo "Installing Sway + Utilities"
-sudo apt install sway swaylock waybar wdisplays lxpolkit kanshi wofi rofi dunst neofetch zathura brightnessctl pavucontrol -y
+sudo apt install sway waybar wdisplays lxpolkit kanshi wofi rofi dunst neofetch zathura brightnessctl pavucontrol -y
 sudo usermod -aG video ${USER}
 sudo systemctl disable polkit
 sudo systemctl mask polkit
 
+git clone https://github.com/mortie/swaylock-effects.git
+cd swaylock-effects
+meson build
+ninja -C build
+sudo ninja -C build install
+sudo chmod +s /usr/local/bin/swaylock
+
 echo
 echo "Installing dotfiles"
-cp -r config/ ~/.config/
+cp -r config/* $HOME/.config/
 
 echo
 echo "Installing wallpapers"
-cp -r wallpapers ~/
+cp -r wallpapers $HOME
 
 echo "Installing Wireshark"
 echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
 sudo DEBIAN_FRONTEND=noninteractive apt install wireshark -y
 sudo usermod -aG wireshark ${USER}
-
-#echo
-#echo "Installing Signal"
-#wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg
-#cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
-
-#echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' | sudo tee /etc/apt/sources.list.d/signal-xenial.list
-#sudo apt update && sudo apt install signal-desktop -y
-
-#echo
-#echo "Installing Steam"
-#sudo add-apt-repository multiverse -y
-#sudo apt update
-#sudo apt install steam -y
-# Install mangohud
-#sudo apt install mangohud -y
-# Build gamemode
-#sudo apt install meson libsystemd-dev pkg-config ninja-build git libdbus-1-dev libinih-dev build-essential -y
-#git clone https://github.com/FeralInteractive/gamemode.git
-#cd gamemode
-#./bootstrap.sh
-#sudo apt install linux-tools-common -y
-#sudo apt install linux-tools-$(uname -r) linux-tools-generic -y
 
 echo
 echo "Installing Chrome"
@@ -98,16 +92,26 @@ echo "Installing VSCode"
 wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" -O code.deb
 sudo dpkg -i code.deb
 
-#echo
-#echo "Installing nvidia Drivers + CUDA-TOOLKIT"
-#sudo ubuntu-drivers install
-#sudo apt install nvidia-cuda-toolkit nvidia-cuda-toolkit-gcc -y
-# Patch sway for the new drivers
-#sudo sed -i "s/Exec=sway/Exec=sway --unsupported-gpu/g" /usr/share/wayland-sessions/sway.desktop
+echo
+echo "Updating Desktop Database"
+sudo update-desktop-database
 
-#echo
-#echo "Installing Sublime"
-#wget "https://download.sublimetext.com/sublime-text_build-3211_amd64.deb" -O sublime.deb
-#sudo dpkg -i sublime.deb
+sudo sed -i 's:\[daemon\]:\[daemon\]\nDefaultSession=sway.desktop:g' /etc/gdm3/custom.conf
 
+echo
+echo "Setting up aliases"
+echo "alias vim='nvim'" >> $HOME/.zshrc
+echo "alias svim='sudo nvim'" >> $HOME/.zshrc
 
+echo "COMPLETE!"
+echo '#### SCRIPT WILL REBOOT IN 5 SECONDS ####'
+sleep 1
+echo '#### SCRIPT WILL REBOOT IN 4 SECONDS ####'
+sleep 1
+echo '#### SCRIPT WILL REBOOT IN 3 SECONDS ####'
+sleep 1
+echo '#### SCRIPT WILL REBOOT IN 2 SECONDS ####'
+sleep 1
+echo '#### SCRIPT WILL REBOOT IN 1 SECONDS ####'
+sleep 1
+reboot

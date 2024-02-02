@@ -16,7 +16,7 @@ set $up k
 set $right l
 
 # Your preferred terminal emulator
-set $term /home/rage/.cargo/bin/alacritty
+set $term ~/.cargo/bin/alacritty
 
 
 # Your preferred application launcher
@@ -30,7 +30,7 @@ include /etc/sway/config-vars.d/*
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 
-output * bg /home/rage/wallpapers/wallhaven-4xwqmo.jpg fill
+output * bg ~/wallpapers/wallhaven-4xwqmo.jpg fill
 
 #
 # Example configuration:
@@ -203,6 +203,9 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
+
+
+bindsym $mod+Shift+x exec swaylock -C ~/.config/swaylock/config
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
